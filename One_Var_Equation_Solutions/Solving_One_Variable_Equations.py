@@ -91,7 +91,7 @@ def bisection_method(f, a, b, tol=0.000001, N=100):
             FA = FP
         else:
             b = p
-    print('Method failed after N iterations, N=',N)
+    print(f'Method failed after N iterations, N={N}')
     return 'failure'
 
 def fixed_point_iteration(f, p0, tol=0.00000001, N=100):
@@ -110,5 +110,26 @@ def fixed_point_iteration(f, p0, tol=0.00000001, N=100):
         i+=1
         p0 = p
 
-    print('Method failed after N iterations, N= ',N)
+    print(f'Method failed after N iterations, N={N}')
+    return 'failure'
+
+def Steffensen(f, p0, tol=0.0000001, N=100):
+    """
+    Finds solution to to p = f(p) given an initial approximation of p0
+    """
+    i = 1
+
+    while i<N:
+        p1 = f(p0)
+        p2 = f(p1)
+        
+        p = p0 - (p1 - p0)**2 / (p2- 2*p1 + p0)
+
+        if abs(p - p0) < tol:
+            return p
+
+        i = i + 1
+        p0 = p
+
+    print(f'Method failed after N iterations, N={N}')
     return 'failure'
