@@ -3,21 +3,36 @@ import pandas as pd
 class BinReg:
     def __init__(self):
         self.values = []
+        self.order = []
+        self.normalization_weight = {}
 
-    def fit(self, X):
+    def prep_data(self, df, order=[]):
+        df = pd.DataFrame(df)
+        if len(order) < 1:
+            self.order = df.columns
+            #if order is not defined, then pick one at random
+            order = df.columns
+
+        for count, col in enumerate(order):
+            df[col] = (df[col] / max(df[col])) + (count + 1)
+
+        return df
+
+    def fit(self, X, order=[]):
         """
         For each point of data in X,
         assuming all values in X are ones in the set we are looking to classify -
         Build a function that uses each point as a root of the function.
         """
-        df = pd.DataFrame(X)
-
+        self.order=order
+        df = self.prep_data(pd.DataFrame(X), order=order)
+        
         for i in df.iterrows():
             self.values.append(i[1].product())
 
     def predict(self, X, normalize_out = False):
         predicted_values = []
-        df = pd.DataFrame(X)
+        df = self.prep_data(pd.DataFrame(X), order=self.order)
         print(df)
         for i in df.iterrows():
             prod = i[1].product()
@@ -51,6 +66,8 @@ def main():
          [3,4,5,6,7],
          [3,5,8,9,1],
          [2,2,8,1,7]]
+
+    print(model.prep_data([[1,4,6,9,1]]))
 
     model.fit(X)
 
