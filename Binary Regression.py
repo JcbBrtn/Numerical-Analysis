@@ -4,7 +4,6 @@ class BinReg:
     def __init__(self):
         self.values = []
         self.order = []
-        self.normalization_weight = {}
 
     def prep_data(self, df, order=[]):
         df = pd.DataFrame(df)
@@ -33,7 +32,6 @@ class BinReg:
     def predict(self, X, normalize_out = False):
         predicted_values = []
         df = self.prep_data(pd.DataFrame(X), order=self.order)
-        print(df)
         for i in df.iterrows():
             prod = i[1].product()
             total = 1
@@ -67,13 +65,11 @@ def main():
          [3,5,8,9,1],
          [2,2,8,1,7]]
 
-    print(model.prep_data([[1,4,6,9,1]]))
-
     model.fit(X)
 
     X_test = [[5,4,3,2,1],
               [6,7,8,9,1],
-              [5,2,4,6,8],
+              [5,2,4,6,7],
               [7,2,3,1,4],
               [1,4,6,9,1]]
 
